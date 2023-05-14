@@ -10,8 +10,7 @@ namespace SimpleBank.Domain.BankAggregate
         public string Name { get; }
         public Address Address { get; }
        
-        // [TODO]: Assign IFSC based on bank branch in the future
-        public string BankBranchIFSC { get; } = string.Empty;
+        public string BranchIFSC { get; }
 
         public decimal TransactionLimit { get; }
         public string Currency { get; }
@@ -19,23 +18,22 @@ namespace SimpleBank.Domain.BankAggregate
         private readonly List<BankAccount> _accounts = new();
         public IEnumerable<BankAccount> Accounts { get => _accounts.AsReadOnly(); } 
 
-        public Bank(string name, Address address, string branchIFSC, decimal transactionLimit, string currency)
+        public Bank(string name, Address address, decimal transactionLimit, string currency)
         {
             Name = name;
             Address = address;
-            BankBranchIFSC = branchIFSC != string.Empty 
-                ? branchIFSC 
-                : AlphaNumericGenerator.GetRandomAlphaNumeric(3, 7);
+            BranchIFSC = AlphaNumericGenerator.GetRandomAlphaNumeric(3, 7);
             TransactionLimit = transactionLimit;
             Currency = currency;
         }
 
         
-        public BankAccount CreateAccount() 
+        public BankAccount CreateAccount(decimal initialBalance = 0m) 
         {
             var account = new BankAccount(
                 AlphaNumericGenerator.GetRandomNumbers(10), 
-                this
+                this,
+                initialBalance
             );
             _accounts.Add(account);
             return account;

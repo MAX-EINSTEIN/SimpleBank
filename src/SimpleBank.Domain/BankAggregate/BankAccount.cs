@@ -1,5 +1,4 @@
 ﻿using SimpleBank.Domain.Base;
-using SimpleBank.Domain.CustomerAggregate;
 
 namespace SimpleBank.Domain.BankAggregate
 {
@@ -8,7 +7,7 @@ namespace SimpleBank.Domain.BankAggregate
         public string AccountNumber { get; }
         internal Bank Bank { get; }
 
-        public string BranchIFSC { get => Bank.BankBranchIFSC; }
+        public string BranchIFSC { get => Bank.BranchIFSC; }
 
         private decimal _balance = decimal.Zero;
         public decimal Balance => Math.Round(_balance, 2);
@@ -27,9 +26,23 @@ namespace SimpleBank.Domain.BankAggregate
             _balance = updatedBalance;
         }
         
+        public void DepositAmount(decimal amount)
+        {
+            if (amount <= 0m) throw new InvalidOperationException($"Amount to deposit can not be less than {Bank.Currency} 0.00");
+            if(amount <= Bank.TransactionLimit)
+            {
+                UpdateBalance(_balance + amount);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Amount exceeds the transaction limit of {Bank.Currency} {Bank.TransactionLimit}");
+            }
+        }
+
         public void WithdrawAmount(decimal amount)
         {
-            if(amount <= Bank.TransactionLimit) 
+            if (amount <= 0m) throw new InvalidOperationException($"Amount to deposit can not be less than {Bank.Currency} 0.00");
+            if (amount <= Bank.TransactionLimit)
             {
                 try
                 {
@@ -49,18 +62,5 @@ namespace SimpleBank.Domain.BankAggregate
                 throw new InvalidOperationException($"Amount exceeds the transaction limit of {Bank.Currency} {Bank.TransactionLimit}");
             }
         }
-
-        public void DepositAmount(decimal amount)
-        {
-            if(amount <= Bank.TransactionLimit)
-            {
-                UpdateBalance(_balance + amount);
-            }
-            else
-            {
-                throw new InvalidOperationException($"Amount exceeds the transaction limit of {Bank.Currency} {Bank.TransactionLimit}");
-            }
-        }
-
     }
 }
