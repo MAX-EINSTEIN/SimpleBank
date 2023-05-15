@@ -1,7 +1,6 @@
-﻿using SimpleBank.Domain.Base;
+﻿using SimpleBank.Domain.Contracts;
 using SimpleBank.Domain.Shared;
 using SimpleBank.Domain.SharedKernel;
-using System.Security.Cryptography.X509Certificates;
 
 namespace SimpleBank.Domain.BankAggregate
 {

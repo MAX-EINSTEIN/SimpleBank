@@ -1,4 +1,4 @@
-﻿namespace SimpleBank.Domain.Base
+﻿namespace SimpleBank.Domain.Contracts
 {
     public abstract class Entity
     {

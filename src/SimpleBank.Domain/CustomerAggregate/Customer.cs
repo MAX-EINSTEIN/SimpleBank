@@ -1,4 +1,4 @@
-﻿using SimpleBank.Domain.Base;
+﻿using SimpleBank.Domain.Contracts;
 using SimpleBank.Domain.SharedKernel;
 
 namespace SimpleBank.Domain.CustomerAggregate

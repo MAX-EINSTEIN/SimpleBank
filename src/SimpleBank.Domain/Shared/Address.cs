@@ -1,4 +1,4 @@
-﻿using SimpleBank.Domain.Base;
+﻿using SimpleBank.Domain.Contracts;
 
 namespace SimpleBank.Domain.SharedKernel
 {
