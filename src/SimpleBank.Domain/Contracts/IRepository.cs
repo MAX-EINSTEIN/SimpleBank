@@ -4,11 +4,11 @@ namespace SimpleBank.Domain.Contracts
 {
     public interface IRepository<T> where T: Entity, IAggregateRoot
     {
-        Task<T> GetByIdAsync(int id);
-        Task<IEnumerable<T>> ListAsync();
-        Task<IEnumerable<T>> ListAsync(Expression<Func<T, bool>> predicate);
-        Task<bool> AddAsync(T entity);
-        Task<bool> DeleteAsync(T entity);
-        Task<bool> UpdateAsync(T entity);
+        Task<T?> GetById(int id);
+        Task<IEnumerable<T>> List();
+        Task<IEnumerable<T>> List(Expression<Func<T, bool>> predicate);
+        Task<T> Add(T entity);
+        Task Delete(T entity);
+        Task Update(T entity);
     }
 }
