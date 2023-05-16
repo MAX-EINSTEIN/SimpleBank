@@ -29,6 +29,7 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
             builder.Property<decimal>("_balance")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("Balance")
+                .HasPrecision(9, 2)
                 .IsRequired();
 
             builder.Ignore(a => a.Balance);

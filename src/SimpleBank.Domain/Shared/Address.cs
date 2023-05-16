@@ -1,6 +1,6 @@
 ﻿using SimpleBank.Domain.Contracts;
 
-namespace SimpleBank.Domain.SharedKernel
+namespace SimpleBank.Domain.Shared
 {
     public class Address: ValueObject
     {
@@ -9,6 +9,11 @@ namespace SimpleBank.Domain.SharedKernel
         public string Region { get; }
         public string Country { get; }
         public string ZipCode { get; }
+
+        public Address()
+        {
+
+        }
 
         public Address(string street, string city, string region, string country, string zipcode)
         {

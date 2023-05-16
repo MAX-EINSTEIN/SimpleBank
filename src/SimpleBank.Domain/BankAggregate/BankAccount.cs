@@ -12,6 +12,11 @@ namespace SimpleBank.Domain.BankAggregate
         private decimal _balance = decimal.Zero;
         public decimal Balance => Math.Round(_balance, 2);
 
+        public BankAccount()
+        {
+
+        }
+
         public BankAccount(string accountNumber, Bank bank, decimal balance = 0m)
         {
             AccountNumber = accountNumber;

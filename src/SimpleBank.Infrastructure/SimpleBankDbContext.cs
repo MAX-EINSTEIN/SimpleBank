@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage;
 using SimpleBank.Domain.BankAggregate;
 using SimpleBank.Domain.Contracts;
+using SimpleBank.Infrastructure.EntityConfigurations;
 
 namespace SimpleBank.Infrastructure
 {
@@ -17,6 +18,12 @@ namespace SimpleBank.Infrastructure
             await base.SaveChangesAsync(cancellationToken);
 
             return true;
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new BankEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new BankAccountEntityTypeConfiguration());
         }
     }
 

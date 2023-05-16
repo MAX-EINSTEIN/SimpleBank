@@ -1,13 +1,12 @@
 ﻿using SimpleBank.Domain.Contracts;
 using SimpleBank.Domain.Shared;
-using SimpleBank.Domain.SharedKernel;
 
 namespace SimpleBank.Domain.BankAggregate
 {
     public class Bank : Entity, IAggregateRoot
     {
         public string Name { get; }
-        public Address Address { get; }
+        public Address Address { get;  }
        
         public string BranchIFSC { get; }
 
@@ -16,6 +15,11 @@ namespace SimpleBank.Domain.BankAggregate
 
         private readonly List<BankAccount> _accounts = new();
         public IEnumerable<BankAccount> Accounts { get => _accounts.AsReadOnly(); } 
+
+        public Bank()
+        {
+
+        }
 
         public Bank(string name, Address address, decimal transactionLimit, string currency)
         {

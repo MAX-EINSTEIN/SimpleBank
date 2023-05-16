@@ -18,21 +18,26 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
                 .HasMaxLength(250)
                 .IsRequired();
 
-            builder.OwnsOne(b => b.Address, a =>
+            builder.OwnsOne(b => b.Address, x =>
             {
-                a.WithOwner();
+                x.Property(a => a.Street);
+                x.Property(a => a.City);
+                x.Property(a => a.Region);
+                x.Property(a => a.Country);
+                x.Property(a => a.ZipCode);
             });
 
             builder.Property(b => b.BranchIFSC).IsRequired();
-            builder.Property(b => b.TransactionLimit).IsRequired();
             builder.Property(b => b.Currency).IsRequired();
+
+            builder.Property<decimal>(b => b.TransactionLimit)
+                .IsRequired()
+                .HasPrecision(9, 2);
 
             var navigation = builder
                 .Metadata
                 .FindNavigation(nameof(Bank.Accounts));
-            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
-
-            
+            navigation!.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.SharedKernel;
+using SimpleBank.Domain.Shared;
 
 namespace SimpleBank.Domain.CustomerAggregate
 {

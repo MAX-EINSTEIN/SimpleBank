@@ -1,5 +1,5 @@
 using SimpleBank.Domain.BankAggregate;
-using SimpleBank.Domain.SharedKernel;
+using SimpleBank.Domain.Shared;
 
 namespace SimpleBanks.Tests
 {

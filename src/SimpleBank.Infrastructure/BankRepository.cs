@@ -14,7 +14,7 @@ namespace SimpleBank.Infrastructure
             _dbContext = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<Bank?> GetById(int id)
+        public async Task<Bank?> GetById(long id)
         {
             return await _dbContext.Banks
                 .Include(b => b.Accounts)
