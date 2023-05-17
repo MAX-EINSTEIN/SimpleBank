@@ -5,9 +5,10 @@ using System.Linq.Expressions;
 
 namespace SimpleBank.Infrastructure
 {
-    public class BankRepository : IRepository<Bank>
+    public class BankRepository: IBankRepository
     {
         private readonly SimpleBankDbContext _dbContext;
+        public IUnitOfWork UnitOfWork => _dbContext;
 
         public BankRepository(SimpleBankDbContext context)
         {

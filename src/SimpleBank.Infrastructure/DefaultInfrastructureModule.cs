@@ -35,6 +35,7 @@ namespace SimpleBank.Infrastructure
         {
            
             builder.RegisterType<BankRepository>()
+                .As(typeof(IBankRepository))
                 .As(typeof(IRepository<Bank>))
                 .InstancePerLifetimeScope();
         }

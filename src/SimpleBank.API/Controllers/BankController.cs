@@ -7,7 +7,7 @@ using SimpleBank.API.DTOs;
 namespace SimpleBank.API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/banks")]
     public class BankController : ControllerBase
     {
         private readonly IRepository<Bank> _bankRepository;
@@ -19,34 +19,25 @@ namespace SimpleBank.API.Controllers
             _logger = logger;
         }
 
+        [Route("list")]
         [HttpGet]
         public async Task<IEnumerable<Bank>> Get()
         {
             return await _bankRepository.List();
         }
 
-        [HttpGet("bankId")]
-        public async Task<ActionResult<BankDTO>> Get(long bankId)
+        [HttpGet("detail/{bankId}")]
+        public async Task<ActionResult<Bank>> Get(long bankId)
         {
             var bank = await _bankRepository.GetById(bankId);
             if (bank is null) { return NotFound();  }
 
-            var dto = new BankDTO
-            (
-                bank.Id,
-                bank.Name,
-                bank.Address.ToString(),
-                bank.BranchIFSC,
-                bank.TransactionLimit,
-                bank.Currency,
-                bank.Accounts.Count()
-            );
-
-            return dto;
+            return Ok(bank);
         }
 
+        [Route("create")]
         [HttpPost]
-        public async Task<ActionResult<CreateBankDTO>> Post(CreateBankDTO dto)
+        public async Task<ActionResult<Bank>> Post(CreateBankDTO dto)
         {
             Bank bank = new (
                 dto.Name,
@@ -62,8 +53,11 @@ namespace SimpleBank.API.Controllers
             );
             await _bankRepository.Add(bank);
 
-            return CreatedAtAction(nameof(Get), 
-                new { id = bank.Id });
+            return CreatedAtAction(
+                        nameof(Get), 
+                        new { bankId = bank.Id}, 
+                        bank
+                    );
         }
     }
 
