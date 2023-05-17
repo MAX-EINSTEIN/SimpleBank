@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using SimpleBank.Domain.BankAggregate;
 using SimpleBank.Domain.Contracts;
+using SimpleBank.Domain.Models;
 using SimpleBank.Infrastructure.EntityConfigurations;
 
 namespace SimpleBank.Infrastructure

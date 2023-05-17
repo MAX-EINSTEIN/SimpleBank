@@ -1,5 +1,4 @@
-using SimpleBank.Domain.BankAggregate;
-using SimpleBank.Domain.Shared;
+using SimpleBank.Domain.Models;
 
 namespace SimpleBanks.Tests
 {
@@ -13,11 +12,25 @@ namespace SimpleBanks.Tests
                 "04860"
             );
 
+        private readonly Customer _customer = new Customer(
+                "Barry Allen",
+                "Male",
+                "barry.allen@gmail.com",
+                "9798767890",
+                new(
+                    "2436 Hamilton Drive",
+                    "East Baby",
+                    "New Mexico",
+                    "USA",
+                    "04860"
+                )
+            );
+
         [Fact]
         public void BranchIFSCIsGeneratedCorrectly()
         {
-            var bank = new Bank("HDFC", _address, 1_000_000m, "USD");
-            
+            var bank = new Bank("HDFC", _address);
+
             Assert.NotNull(bank.BranchIFSC);
             Assert.NotEmpty(bank.BranchIFSC);
             Assert.True(bank.BranchIFSC.Substring(0, 3).All(char.IsLetter));
@@ -27,23 +40,23 @@ namespace SimpleBanks.Tests
         [Fact]
         public void BankAccountIsCreatedAndAddedCorrectly()
         {
-            var bank = new Bank("HDFC", _address, 1_000_000m, "USD");
-            
-            var account = bank.CreateAccount();
+            var bank = new Bank("HDFC", _address);
+
+            var account = bank.CreateAccount(_customer, 1_000_000m, "INR");
 
             Assert.NotNull(account);
             Assert.NotNull(bank.Accounts);
             Assert.Contains(account, bank.Accounts);
             Assert.True(account.AccountNumber.Length == 10);
-            Assert.True(account.AccountNumber.All(char.IsNumber));  
+            Assert.True(account.AccountNumber.All(char.IsNumber));
         }
 
         [Fact]
         public void BankAccountDepositUpdatesBalance()
         {
-            var bank = new Bank("HDFC", _address, 1_000_000m, "USD");
+            var bank = new Bank("HDFC", _address);
 
-            var account = bank.CreateAccount();
+            var account = bank.CreateAccount(_customer, 1000000m, "INR");
 
             var amountToDeposit = 10_000m;
             account.DepositAmount(amountToDeposit);
@@ -54,9 +67,9 @@ namespace SimpleBanks.Tests
         [Fact]
         public void BankAccountDepositFailsOnNegativeOrZeroAmount()
         {
-            var bank = new Bank("HDFC", _address, 1_000_000m, "USD");
+            var bank = new Bank("HDFC", _address);
 
-            var account = bank.CreateAccount();
+            var account = bank.CreateAccount(_customer, 1_000_000m, "INR");
 
             var negativeAmount = -10_000m;
             Assert.Throws<InvalidOperationException>(() => account.DepositAmount(negativeAmount));
@@ -67,10 +80,10 @@ namespace SimpleBanks.Tests
         [Fact]
         public void BankAccountDepositFailsOnDepostingAmountGreaterThanTransactionLimit()
         {
-            var bank = new Bank("HDFC", _address, 1_000_000m, "USD");
+            var bank = new Bank("HDFC", _address);
 
-            var account = bank.CreateAccount();
-            
+            var account = bank.CreateAccount(_customer, 1000000m, "INR");
+
             var largeAmount = 5_000_000m;
             Assert.Throws<InvalidOperationException>(() => account.DepositAmount(largeAmount));
         }
@@ -78,9 +91,11 @@ namespace SimpleBanks.Tests
         [Fact]
         public void BankAccountWithdrawalUpdatesBalance()
         {
-            var bank = new Bank("HDFC", _address, 1_000_000m, "USD");
+            var bank = new Bank("HDFC", _address);
 
-            var account = bank.CreateAccount(10_000m);
+            var account = bank.CreateAccount(_customer, 1000000m, "INR");
+            account.DepositAmount(10_000m);
+
             account.WithdrawAmount(10_000m);
 
             Assert.Equal(decimal.Zero, account.Balance);
@@ -89,9 +104,9 @@ namespace SimpleBanks.Tests
         [Fact]
         public void BankAccountWithdrawalFailsOnNegativeOrZeroAmount()
         {
-            var bank = new Bank("HDFC", _address, 1_000_000m, "USD");
+            var bank = new Bank("HDFC", _address);
 
-            var account = bank.CreateAccount(5_00_000m);
+            var account = bank.CreateAccount(_customer, 1000000m, "INR");
 
             var negativeAmount = -10_000m;
             Assert.Throws<InvalidOperationException>(() => account.WithdrawAmount(negativeAmount));
@@ -102,9 +117,9 @@ namespace SimpleBanks.Tests
         [Fact]
         public void BankAccountWithdrawalFailsOnDepostingAmountGreaterThanTransactionLimit()
         {
-            var bank = new Bank("HDFC", _address, 1_000_000m, "USD");
+            var bank = new Bank("HDFC", _address);
 
-            var account = bank.CreateAccount(5_000_000m);
+            var account = bank.CreateAccount(_customer, 1_000_000m, "INR");
 
             var largeAmount = 2_000_000m;
             Assert.Throws<InvalidOperationException>(() => account.WithdrawAmount(largeAmount));
@@ -113,9 +128,9 @@ namespace SimpleBanks.Tests
         [Fact]
         public void BankAccountWithdrawalFailsOnWithdrawingAmountGreaterThanBalance()
         {
-            var bank = new Bank("HDFC", _address, 1_000_000m, "USD");
+            var bank = new Bank("HDFC", _address);
 
-            var account = bank.CreateAccount(500_000m);
+            var account = bank.CreateAccount(_customer, 1000000m, "INR");
 
             var exceedingAmount = 600_000m;
             Assert.Throws<InvalidOperationException>(() => account.WithdrawAmount(exceedingAmount));

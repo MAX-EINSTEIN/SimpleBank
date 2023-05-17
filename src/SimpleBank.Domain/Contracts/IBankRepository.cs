@@ -1,4 +1,4 @@
-﻿using SimpleBank.Domain.BankAggregate;
+﻿using SimpleBank.Domain.Models;
 
 namespace SimpleBank.Domain.Contracts
 {

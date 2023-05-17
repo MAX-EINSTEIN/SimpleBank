@@ -1,4 +1,4 @@
-﻿namespace SimpleBank.Domain.Shared
+﻿namespace SimpleBank.Domain.Utils
 {
     internal static class AlphaNumericGenerator
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SimpleBank.Domain.BankAggregate;
+using SimpleBank.Domain.Models;
 
 namespace SimpleBank.Infrastructure.EntityConfigurations
 {
@@ -28,11 +28,6 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
             });
 
             builder.Property(b => b.BranchIFSC).IsRequired();
-            builder.Property(b => b.Currency).IsRequired();
-
-            builder.Property<decimal>(b => b.TransactionLimit)
-                .IsRequired()
-                .HasPrecision(9, 2);
 
             var navigation = builder
                 .Metadata

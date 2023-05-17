@@ -6,8 +6,6 @@
         string City,
         string Region,
         string Country,
-        string ZipCode,
-        decimal TransactionLimit,
-        string Currency
+        string ZipCode
     );
 }

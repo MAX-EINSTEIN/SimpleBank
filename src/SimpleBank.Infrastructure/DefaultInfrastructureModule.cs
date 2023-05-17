@@ -1,7 +1,6 @@
 ﻿using Autofac;
-using SimpleBank.Domain.BankAggregate;
 using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Shared;
+using SimpleBank.Domain.Models;
 using System.Reflection;
 
 namespace SimpleBank.Infrastructure

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SimpleBank.Domain.BankAggregate;
+using SimpleBank.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +23,32 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
                 .HasMaxLength(10)
                 .IsRequired();
 
-            builder.Property<long>("BankId")
+            builder.Property(b => b.BranchIFSC)
+                .HasMaxLength(10)
+                .IsRequired();
+
+            builder.OwnsOne(b => b.AccountHolder, y =>
+            {
+                y.Property(a => a.Name);
+                y.Property(a => a.Gender);
+                y.Property(a => a.Email);
+                y.Property(a => a.PhoneNumber);
+                y.OwnsOne(a => a.Address, x =>
+                {
+                    x.Property(a => a.Street);
+                    x.Property(a => a.City);
+                    x.Property(a => a.Region);
+                    x.Property(a => a.Country);
+                    x.Property(a => a.ZipCode);
+                });
+            });
+
+
+            builder.Property(b => b.TransactionLimit)
+                .HasPrecision(9, 2);
+
+            builder.Property(b => b.Currency)
+                .HasMaxLength(3)
                 .IsRequired();
 
             builder.Property<decimal>("_balance")
@@ -33,7 +58,6 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
                 .IsRequired();
 
             builder.Ignore(a => a.Balance);
-            builder.Ignore(a => a.BranchIFSC);
         }
     }
 }

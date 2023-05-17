@@ -1,8 +1,8 @@
 ﻿using SimpleBank.Domain.Contracts;
 
-namespace SimpleBank.Domain.Shared
+namespace SimpleBank.Domain.Models
 {
-    public class Address: ValueObject
+    public class Address : ValueObject
     {
         public string Street { get; }
         public string City { get; }
@@ -26,16 +26,16 @@ namespace SimpleBank.Domain.Shared
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return Street; 
-            yield return City; 
-            yield return Region; 
-            yield return Country; 
+            yield return Street;
+            yield return City;
+            yield return Region;
+            yield return Country;
             yield return ZipCode;
         }
 
         public override string ToString()
             => $"{Street}\n"
-            +  $"{City}, {Region}\n" 
-            +  $"{Country} - {ZipCode}";
+            + $"{City}, {Region}\n"
+            + $"{Country} - {ZipCode}";
     }
 }

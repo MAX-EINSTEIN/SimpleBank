@@ -7,9 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBank.Domain", "src\Si
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBank.UnitTests", "tests\SimpleBanks.Tests\SimpleBank.UnitTests.csproj", "{FF78BB41-59BE-4815-BD94-D1519FF81A69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBank.Infrastructure", "src\SimpleBank.Infrastructure\SimpleBank.Infrastructure.csproj", "{C2B95FCD-25A9-4B33-BE11-BB04CC1C4E1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBank.Infrastructure", "src\SimpleBank.Infrastructure\SimpleBank.Infrastructure.csproj", "{C2B95FCD-25A9-4B33-BE11-BB04CC1C4E1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBank.API", "src\SimpleBank.API\SimpleBank.API.csproj", "{ED8573A8-2E97-4EDC-BF92-031D40B57467}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBank.API", "src\SimpleBank.API\SimpleBank.API.csproj", "{ED8573A8-2E97-4EDC-BF92-031D40B57467}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{72FC4F58-C0C5-47F0-9EBF-12587DC837AC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using SimpleBank.Domain.BankAggregate;
 using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Shared;
 using SimpleBank.API.DTOs;
+using SimpleBank.Domain.Models;
 
 namespace SimpleBank.API.Controllers
 {
@@ -10,10 +9,10 @@ namespace SimpleBank.API.Controllers
     [Route("api/banks")]
     public class BankController : ControllerBase
     {
-        private readonly IRepository<Bank> _bankRepository;
+        private readonly IBankRepository _bankRepository;
         private readonly ILogger<BankController> _logger;
 
-        public BankController(IRepository<Bank> bankRepository, ILogger<BankController> logger)
+        public BankController(IBankRepository bankRepository, ILogger<BankController> logger)
         {
             _bankRepository = bankRepository;
             _logger = logger;
@@ -21,15 +20,16 @@ namespace SimpleBank.API.Controllers
 
         [Route("list")]
         [HttpGet]
-        public async Task<IEnumerable<Bank>> Get()
+        public async Task<IEnumerable<Bank>> Index()
         {
             return await _bankRepository.List();
         }
 
-        [HttpGet("detail/{bankId}")]
+        [HttpGet("{bankId}/details")]
         public async Task<ActionResult<Bank>> Get(long bankId)
         {
             var bank = await _bankRepository.GetById(bankId);
+            
             if (bank is null) { return NotFound();  }
 
             return Ok(bank);
@@ -47,9 +47,7 @@ namespace SimpleBank.API.Controllers
                     dto.Region,
                     dto.Country,
                     dto.ZipCode
-                ),
-                dto.TransactionLimit,
-                dto.Currency
+                )
             );
             await _bankRepository.Add(bank);
 
@@ -58,6 +56,18 @@ namespace SimpleBank.API.Controllers
                         new { bankId = bank.Id}, 
                         bank
                     );
+        }
+
+        [HttpDelete("{bankId}/delete")]
+        public async Task<IActionResult> Delete(long bankId)
+        {
+            var bank = await _bankRepository.GetById(bankId);
+
+            if (bank is null) { return NotFound(); }
+
+            await _bankRepository.Delete(bank);
+
+            return NoContent();
         }
     }
 
