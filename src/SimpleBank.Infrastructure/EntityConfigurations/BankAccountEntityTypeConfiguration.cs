@@ -24,7 +24,7 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
                 .IsRequired();
 
             builder.Property(b => b.BranchIFSC)
-                .HasMaxLength(10)
+                .HasMaxLength(11)
                 .IsRequired();
 
             builder.OwnsOne(b => b.AccountHolder, y =>
@@ -58,6 +58,11 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
                 .IsRequired();
 
             builder.Ignore(a => a.Balance);
+
+            var navigation = builder
+                .Metadata
+                .FindNavigation(nameof(BankAccount.TransactionRecords));
+            navigation!.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

@@ -6,6 +6,8 @@
         string City,
         string Region,
         string Country,
-        string ZipCode
+        string ZipCode,
+        string BankCode,
+        string BranchCode
     );
 }

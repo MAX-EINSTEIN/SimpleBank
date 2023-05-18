@@ -44,6 +44,23 @@ namespace SimpleBank.API.Controllers
             return Ok(account);
         }
 
+        [Route("{branchIFSC}/accounts/{accountId}/statement")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TransactionRecord>>> GetAccountStatetement(string branchIFSC, long accountId)
+        {
+            var bank = await _bankRepository.GetByIFSC(branchIFSC, true);
+
+            if (bank is null) return NotFound();
+
+            var account = bank.Accounts
+                            .Where(a => a.Id == accountId)
+                            .FirstOrDefault();
+
+            if (account is null) return NotFound();
+
+            return Ok(account.TransactionRecords);
+        }
+
         [Route("{bankId}/accounts/create")]
         [HttpPost]
         public async Task<ActionResult<BankAccount>> Post(long bankId, CreateAccountDTO dto)

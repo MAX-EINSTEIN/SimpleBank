@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimpleBank.Infrastructure;
 
@@ -11,9 +12,11 @@ using SimpleBank.Infrastructure;
 namespace SimpleBank.Infrastructure.Migrations
 {
     [DbContext(typeof(SimpleBankDbContext))]
-    partial class SimpleBankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230518112104_AddedTransactionRecordEntityToAccountEntity")]
+    partial class AddedTransactionRecordEntityToAccountEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,8 +124,7 @@ namespace SimpleBank.Infrastructure.Migrations
 
                     b.Property<DateTime>("TransactionDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TransactionType")
                         .IsRequired()

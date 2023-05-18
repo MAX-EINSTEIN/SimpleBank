@@ -19,37 +19,45 @@ namespace SimpleBank.Infrastructure
         {
             return await _dbContext.Banks
                 .Include(b => b.Accounts)
-                .Where(b => b.Id == id)
-                .SingleOrDefaultAsync();
+                .Where(b => b.Id == id).SingleOrDefaultAsync(); 
         }
 
         public async Task<Bank?> GetByName(string bankName)
         {
             return await _dbContext.Banks
                 .Include(b => b.Accounts)
+                .ThenInclude(a => a.TransactionRecords)
                 .Where(b => b.Name == bankName)
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<Bank?> GetByIFSC(string branchIFSC)
+        public async Task<Bank?> GetByIFSC(string branchIFSC, bool fetchTransactionRecords = false)
         {
-            return await _dbContext.Banks
+            var fetchOnlyBankAndBankAccount = _dbContext.Banks
                 .Include(b => b.Accounts)
-                .Where(b => b.BranchIFSC == branchIFSC)
-                .SingleOrDefaultAsync();
+                .Where(b => b.BranchIFSC == branchIFSC);
+
+            var fetchAllRelatedEntities = _dbContext.Banks
+                .Include(b => b.Accounts)
+                .ThenInclude(a => a.TransactionRecords)
+                .Where(b => b.BranchIFSC == branchIFSC);
+
+            var queryToRun = fetchTransactionRecords
+                ? fetchAllRelatedEntities
+                : fetchOnlyBankAndBankAccount;
+
+            return await queryToRun.SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Bank>> List()
         {
             return await _dbContext.Banks
-                .Include(b => b.Accounts)
                 .ToListAsync();
         }
 
         public async Task<IEnumerable<Bank>> List(Expression<Func<Bank, bool>> predicate)
         {
             return await _dbContext.Banks
-                .Include(b => b.Accounts)
                 .Where(predicate)
                 .ToListAsync();
         }

@@ -27,7 +27,9 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
                 x.Property(a => a.ZipCode);
             });
 
-            builder.Property(b => b.BranchIFSC).IsRequired();
+            builder.Property(b => b.BranchIFSC)
+                .HasMaxLength(11)
+                .IsRequired();
 
             var navigation = builder
                 .Metadata

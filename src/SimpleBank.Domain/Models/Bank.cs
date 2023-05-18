@@ -18,11 +18,14 @@ namespace SimpleBank.Domain.Models
             
         }
 
-        public Bank(string name, Address address)
+        public Bank(string name,
+                    Address address,
+                    string bankCode = "SBIN",
+                    string branchCode = "005943")
         {
             Name = name;
             Address = address;
-            BranchIFSC = AlphaNumericGenerator.GetRandomAlphaNumeric(3, 7);
+            BranchIFSC = bankCode + "0" + branchCode;
         }
 
 

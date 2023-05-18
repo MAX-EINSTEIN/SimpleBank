@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimpleBank.Infrastructure;
 
@@ -11,9 +12,11 @@ using SimpleBank.Infrastructure;
 namespace SimpleBank.Infrastructure.Migrations
 {
     [DbContext(typeof(SimpleBankDbContext))]
-    partial class SimpleBankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230518075426_ChangedTheLengthOfBranchIFSCToEleven")]
+    partial class ChangedTheLengthOfBranchIFSCToEleven
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,62 +88,6 @@ namespace SimpleBank.Infrastructure.Migrations
                     b.HasIndex("BankId");
 
                     b.ToTable("BankAccount", (string)null);
-                });
-
-            modelBuilder.Entity("SimpleBank.Domain.Models.TransactionRecord", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long?>("BankAccountId")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("CreditedAmount")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(9, 2)
-                        .HasColumnType("decimal(9,2)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<decimal>("DebitedAmount")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(9, 2)
-                        .HasColumnType("decimal(9,2)")
-                        .HasDefaultValue(0m);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("ReferenceId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("TransactionDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<string>("TransactionType")
-                        .IsRequired()
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<decimal>("UpdatedBalance")
-                        .HasPrecision(9, 2)
-                        .HasColumnType("decimal(9,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BankAccountId");
-
-                    b.HasIndex("ReferenceId")
-                        .IsUnique();
-
-                    b.ToTable("TransactionRecord", (string)null);
                 });
 
             modelBuilder.Entity("SimpleBank.Domain.Models.Bank", b =>
@@ -257,21 +204,9 @@ namespace SimpleBank.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SimpleBank.Domain.Models.TransactionRecord", b =>
-                {
-                    b.HasOne("SimpleBank.Domain.Models.BankAccount", null)
-                        .WithMany("TransactionRecords")
-                        .HasForeignKey("BankAccountId");
-                });
-
             modelBuilder.Entity("SimpleBank.Domain.Models.Bank", b =>
                 {
                     b.Navigation("Accounts");
-                });
-
-            modelBuilder.Entity("SimpleBank.Domain.Models.BankAccount", b =>
-                {
-                    b.Navigation("TransactionRecords");
                 });
 #pragma warning restore 612, 618
         }

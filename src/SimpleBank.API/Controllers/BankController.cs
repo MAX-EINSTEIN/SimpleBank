@@ -47,8 +47,11 @@ namespace SimpleBank.API.Controllers
                     dto.Region,
                     dto.Country,
                     dto.ZipCode
-                )
+                ),
+                dto.BankCode,
+                dto.BranchCode
             );
+
             await _bankRepository.Add(bank);
 
             return CreatedAtAction(

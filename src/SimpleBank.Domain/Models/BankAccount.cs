@@ -15,6 +15,9 @@ namespace SimpleBank.Domain.Models
         private decimal _balance = decimal.Zero;
         public decimal Balance => Math.Round(_balance, 2);
 
+        private readonly List<TransactionRecord> _transactionRecords = new();
+        public IList<TransactionRecord> TransactionRecords => _transactionRecords.AsReadOnly(); 
+
         public Customer AccountHolder { get; }
 
         public BankAccount()
@@ -44,12 +47,23 @@ namespace SimpleBank.Domain.Models
             _balance = updatedBalance;
         }
 
-        public void DepositAmount(decimal amount)
+        private void AddTransactionRecord(string description, decimal debitedAmount, decimal creditedAmount, decimal updatedBalance)
+        {
+            TransactionRecord trasaction = new(description, debitedAmount, creditedAmount, Balance);
+            _transactionRecords.Add(trasaction);
+        }
+
+        public void DepositAmount(decimal amount, string? description = null)
         {
             if (amount <= 0m) throw new InvalidOperationException($"Amount to deposit can not be less than {Currency} 0.00");
             if (amount <= TransactionLimit)
             {
                 UpdateBalance(_balance + amount);
+
+                if (string.IsNullOrEmpty(description))
+                    description = $"A/C {AccountNumber} credited with {amount}".ToUpperInvariant();
+
+                AddTransactionRecord(description, 0m, amount, Balance);
             }
             else
             {
@@ -57,7 +71,7 @@ namespace SimpleBank.Domain.Models
             }
         }
 
-        public void WithdrawAmount(decimal amount)
+        public void WithdrawAmount(decimal amount, string? description = null)
         {
             if (amount <= 0m) throw new InvalidOperationException($"Amount to deposit can not be less than {Currency} 0.00");
             if (amount <= TransactionLimit)
@@ -65,6 +79,11 @@ namespace SimpleBank.Domain.Models
                 try
                 {
                     UpdateBalance(Balance - amount);
+
+                    if (string.IsNullOrEmpty(description))
+                        description = $"A/C {AccountNumber} debited with {amount}".ToUpperInvariant();
+
+                    AddTransactionRecord(description, amount, 0m, Balance);
                 }
                 catch (InvalidOperationException ex)
                 {
