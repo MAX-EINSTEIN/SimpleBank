@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimpleBank.Infrastructure;
 
@@ -11,9 +12,11 @@ using SimpleBank.Infrastructure;
 namespace SimpleBank.Infrastructure.Migrations
 {
     [DbContext(typeof(SimpleBankDbContext))]
-    partial class SimpleBankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230519102904_AddedAndConfiguredFundTransferEntityInDbContext")]
+    partial class AddedAndConfiguredFundTransferEntityInDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,13 +100,15 @@ namespace SimpleBank.Infrastructure.Migrations
 
                     b.Property<string>("BankReferenceNo")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nchar(12)")
+                        .IsFixedLength();
 
                     b.Property<string>("DestinationAccountBranchIFSC")
                         .IsRequired()
                         .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nchar(11)")
+                        .IsFixedLength();
 
                     b.Property<string>("DestinationAccountNumber")
                         .IsRequired()
@@ -124,7 +129,8 @@ namespace SimpleBank.Infrastructure.Migrations
                     b.Property<string>("SourceAccountBranchIFSC")
                         .IsRequired()
                         .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
+                        .HasColumnType("nchar(11)")
+                        .IsFixedLength();
 
                     b.Property<string>("SourceAccountNumber")
                         .IsRequired()

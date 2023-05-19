@@ -10,6 +10,7 @@ namespace SimpleBank.Infrastructure
         public DbSet<Bank> Banks { get; set; } = null!;
         public DbSet<BankAccount> BankAccounts { get; set; } = null!;
         public DbSet<TransactionRecord> TransactionRecords { get; set; } = null!;
+        public DbSet<FundTransfer> FundTransfers { get; set; } = null!;
 
         public SimpleBankDbContext(DbContextOptions<SimpleBankDbContext> options): base(options) { }
 
@@ -25,6 +26,7 @@ namespace SimpleBank.Infrastructure
             modelBuilder.ApplyConfiguration(new BankEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new BankAccountEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionRecordEntityTypeConfiguration()); ;
+            modelBuilder.ApplyConfiguration(new FundTransferEntityTypeConfiguration());
         }
     }
 

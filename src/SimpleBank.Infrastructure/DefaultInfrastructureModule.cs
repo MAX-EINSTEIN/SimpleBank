@@ -37,6 +37,11 @@ namespace SimpleBank.Infrastructure
                 .As(typeof(IBankRepository))
                 .As(typeof(IRepository<Bank>))
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<FundTransferRepository>()
+                .As(typeof(IFundTransferRepository))
+                .As(typeof(IRepository<FundTransfer>))
+                .InstancePerLifetimeScope();
         }
     }
 }
