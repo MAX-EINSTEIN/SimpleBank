@@ -28,6 +28,7 @@ namespace SimpleBank.Domain.Models
                             string sourceAccountBranchIFSC,
                             string destinationAccountNumber,
                             string destinationAccountBranchIFSC,
+                            decimal amount,
                             string? paymentMode,
                             string remarks)
         {
@@ -35,15 +36,14 @@ namespace SimpleBank.Domain.Models
             SourceAccountBranchIFSC = sourceAccountBranchIFSC;
             DestinationAccountNumber = destinationAccountNumber;
             DestinationAccountBranchIFSC = destinationAccountBranchIFSC;
+            _amount = amount;
             BankReferenceNo = AlphaNumericGenerator.GetRandomNumbers(8);
             PaymentMode = paymentMode;
             Remarks = remarks;
         }
 
-        public void TransferAmount(decimal amount, Bank sourceBank, Bank destinationBank)
+        public void TransferAmount(Bank sourceBank, Bank destinationBank)
         {
-            _amount = amount;
-
             var sourceAccount = sourceBank.Accounts.Where(a => a.AccountNumber == SourceAccountNumber).SingleOrDefault();
             if (sourceAccount is null)
                 throw new InvalidOperationException("The Provided Source Account Number is incorrect.");
@@ -55,8 +55,21 @@ namespace SimpleBank.Domain.Models
             using var txnScope = new TransactionScope(TransactionScopeOption.RequiresNew);
             try
             {
-                sourceAccount.WithdrawAmount(amount);
-                destinationAccount.DepositAmount(amount);
+                var withdrawDescription = (
+                    $"To {PaymentMode} UTR {BankReferenceNo} - "
+                    + $"Sent To {destinationAccount.AccountHolder.Name} - "
+                    + $"Transfer to A/C No {DestinationAccountNumber}"
+                    ).ToUpperInvariant();
+
+                sourceAccount.WithdrawAmount(Amount, withdrawDescription);
+
+                var depositDescription = (
+                    $"By {PaymentMode} UTR {BankReferenceNo} - "
+                    + $"Sent From {sourceAccount.AccountHolder.Name} - "
+                    + $"Transfer From A/C No {SourceAccountNumber}"
+                    ).ToUpperInvariant();
+
+                destinationAccount.DepositAmount(Amount, depositDescription);
 
                 txnScope.Complete();
             }

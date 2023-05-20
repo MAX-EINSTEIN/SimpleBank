@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SimpleBank.API.DTOs;
-using SimpleBank.Domain.Contracts;
+using SimpleBank.Application.Contracts;
+using SimpleBank.Application.DTOs;
 using SimpleBank.Domain.Models;
 
 namespace SimpleBank.API.Controllers
@@ -9,21 +9,19 @@ namespace SimpleBank.API.Controllers
     [ApiController]
     public class FundTransferController: ControllerBase
     {
-        private readonly IBankRepository _bankRepository;
-        private readonly IFundTransferRepository _fundTransferRepository;
+        private readonly IFundTransferService _fundTransferService;
         private readonly ILogger<FundTransfer> _logger;
 
-        public FundTransferController(IBankRepository bankRepository, IFundTransferRepository fundTransferRepository, ILogger<FundTransfer> logger)
+        public FundTransferController(IFundTransferService fundTransferService, ILogger<FundTransfer> logger)
         {
-            _bankRepository = bankRepository;
-            _fundTransferRepository = fundTransferRepository;
+            _fundTransferService = fundTransferService;
             _logger = logger;
         }
 
         [HttpGet("{UTRNumber}/details")]
         public async Task<ActionResult<FundTransfer?>> Get(string UTRNumber)
         {
-            var fundTransfer = await _fundTransferRepository.GetByUTRNumber(UTRNumber);
+            var fundTransfer = await _fundTransferService.GetByUTRNumber(UTRNumber);
 
             if (fundTransfer is null) return NotFound();
 
@@ -33,45 +31,17 @@ namespace SimpleBank.API.Controllers
         [HttpPost]
         public async Task<ActionResult<FundTransfer>> Create(CreateFundTransferDTO dto)
         {
-            var fundTransfer = new FundTransfer(
-                                    dto.SourceAccountNumber,
-                                    dto.SourceAccountBranchIFSC,
-                                    dto.DestinationAccountNumber,
-                                    dto.DestinationAccontBranchIFSC,
-                                    dto.PaymentMode,
-                                    dto.Remarks
-                                );
 
-            if (fundTransfer is null) return BadRequest();
+            var fundTransfer = await _fundTransferService.Process(dto);
 
-            fundTransfer = await _fundTransferRepository.Add(fundTransfer);
-            var sourceBank = await _bankRepository.GetByIFSC(dto.SourceAccountBranchIFSC);
-            var destinationBank = await _bankRepository.GetByIFSC(dto.DestinationAccontBranchIFSC);
-
-            if (sourceBank is null || destinationBank is null)
-                return BadRequest();
-
-            try
-            {
-                fundTransfer.TransferAmount(dto.Amount, sourceBank, destinationBank);
-
-                await _bankRepository.Update(sourceBank);
-                await _bankRepository.Update(destinationBank);
-            } catch (Exception ex)
-            {
-                return BadRequest();
-            }
-
-            await _fundTransferRepository.Update(fundTransfer);
+            if (fundTransfer is null) return NotFound();
 
             return CreatedAtAction(
                     nameof(Get),
-                    new { UTRNumber = fundTransfer.UTRNumber },
+                    new { fundTransfer.UTRNumber },
                     fundTransfer
                 );
         }
 
     }
 }
-
-

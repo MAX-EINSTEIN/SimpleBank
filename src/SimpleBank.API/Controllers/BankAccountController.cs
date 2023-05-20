@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SimpleBank.API.DTOs;
+using SimpleBank.Application.DTOs;
 using SimpleBank.Domain.Contracts;
 using SimpleBank.Domain.Models;
 

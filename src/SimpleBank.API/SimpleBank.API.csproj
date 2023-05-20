@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SimpleBank.Application\SimpleBank.Application.csproj" />
     <ProjectReference Include="..\SimpleBank.Domain\SimpleBank.Domain.csproj" />
     <ProjectReference Include="..\SimpleBank.Infrastructure\SimpleBank.Infrastructure.csproj" />
   </ItemGroup>

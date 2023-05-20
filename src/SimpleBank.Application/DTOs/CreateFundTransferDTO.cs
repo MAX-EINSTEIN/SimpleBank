@@ -1,4 +1,4 @@
-﻿namespace SimpleBank.API.DTOs
+﻿namespace SimpleBank.Application.DTOs
 {
     public record CreateFundTransferDTO(
         string SourceAccountNumber,

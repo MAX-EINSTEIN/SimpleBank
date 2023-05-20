@@ -1,12 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using SimpleBank.Infrastructure;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
+//using Autofac;
+//using Autofac.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using SimpleBank.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+//builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 // Add services to the container.
 
@@ -16,12 +17,14 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 // Extension Method defined in Infrastucture Layer
 builder.Services.AddDbContext(connectionString!);
+builder.Services.AddPersistence();
+builder.Services.AddApplicatonServices();
 
-builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
-{
-    //containerBuilder.RegisterModule(new DefaultCoreModule());
-    containerBuilder.RegisterModule(new DefaultInfrastructureModule());
-});
+//builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
+//{
+//    //containerBuilder.RegisterModule(new DefaultCoreModule());
+//    containerBuilder.RegisterModule(new DefaultInfrastructureModule());
+//});
 
 
 

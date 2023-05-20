@@ -3,9 +3,9 @@ using SimpleBank.Domain.Contracts;
 using SimpleBank.Domain.Models;
 using System.Linq.Expressions;
 
-namespace SimpleBank.Infrastructure
+namespace SimpleBank.Infrastructure.Repositories
 {
-    public class BankRepository: IBankRepository
+    public class BankRepository : IBankRepository
     {
         private readonly SimpleBankDbContext _dbContext;
         public IUnitOfWork UnitOfWork => _dbContext;
@@ -19,7 +19,7 @@ namespace SimpleBank.Infrastructure
         {
             return await _dbContext.Banks
                 .Include(b => b.Accounts)
-                .Where(b => b.Id == id).SingleOrDefaultAsync(); 
+                .Where(b => b.Id == id).SingleOrDefaultAsync();
         }
 
         public async Task<Bank?> GetByName(string bankName)

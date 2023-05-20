@@ -1,14 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleBank.Domain.Contracts;
 using SimpleBank.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SimpleBank.Infrastructure
+namespace SimpleBank.Infrastructure.Repositories
 {
     public class FundTransferRepository : IFundTransferRepository
     {

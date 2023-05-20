@@ -1,6 +1,4 @@
-﻿using SimpleBank.Domain.Models;
-
-namespace SimpleBank.API.DTOs
+﻿namespace SimpleBank.Application.DTOs
 {
     public record CreateAccountDTO 
     (
