@@ -6,9 +6,7 @@ namespace SimpleBank.Domain.Models
     public class Bank : Entity, IAggregateRoot
     {
         public string Name { get; }
-        public Address Address { get; }
-
-        public string BranchIFSC { get; }
+        public string BankCode { get; }
 
         private readonly List<BankAccount> _accounts = new();
         public IList<BankAccount> Accounts { get => _accounts.AsReadOnly(); }
@@ -18,14 +16,10 @@ namespace SimpleBank.Domain.Models
             
         }
 
-        public Bank(string name,
-                    Address address,
-                    string bankCode = "SBIN",
-                    string branchCode = "005943")
+        public Bank(string name, string bankCode = "SBIN")
         {
             Name = name;
-            Address = address;
-            BranchIFSC = bankCode + "0" + branchCode;
+            BankCode = bankCode;
         }
 
 
@@ -33,6 +27,8 @@ namespace SimpleBank.Domain.Models
                                          decimal transactionLimit,
                                          string currency)
         {
+            var BranchIFSC = BankCode + "0" + AlphaNumericGenerator.GetRandomNumbers(6);
+
             var account = new BankAccount(
                 AlphaNumericGenerator.GetRandomNumbers(10),
                 BranchIFSC,

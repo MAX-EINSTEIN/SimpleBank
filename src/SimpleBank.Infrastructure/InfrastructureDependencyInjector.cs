@@ -16,6 +16,7 @@ namespace SimpleBank.Infrastructure
         {
             services.AddScoped<IBankRepository, BankRepository>();
             services.AddScoped<IFundTransferRepository, FundTransferRepository>();
+            services.AddScoped<IBankBranchRepository, BankBranchRepository>();
         }
     }
 }

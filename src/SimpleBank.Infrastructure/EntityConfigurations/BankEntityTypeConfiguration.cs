@@ -18,17 +18,9 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
                 .HasMaxLength(250)
                 .IsRequired();
 
-            builder.OwnsOne(b => b.Address, x =>
-            {
-                x.Property(a => a.Street);
-                x.Property(a => a.City);
-                x.Property(a => a.Region);
-                x.Property(a => a.Country);
-                x.Property(a => a.ZipCode);
-            });
-
-            builder.Property(b => b.BranchIFSC)
-                .HasMaxLength(11)
+            builder.HasIndex(b => b.BankCode);
+            builder.Property(b => b.BankCode)
+                .HasMaxLength(4)
                 .IsRequired();
 
             var navigation = builder

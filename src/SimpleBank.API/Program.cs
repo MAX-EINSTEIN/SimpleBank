@@ -4,6 +4,7 @@ using SimpleBank.Infrastructure;
 //using Autofac.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using SimpleBank.Application;
+using SimpleBank.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +16,11 @@ builder.Services.AddControllers();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Extension Method defined in Infrastucture Layer
+// Extension Methods defined in the different Layers
 builder.Services.AddDbContext(connectionString!);
 builder.Services.AddPersistence();
 builder.Services.AddApplicatonServices();
+builder.Services.AddDomainServices();
 
 //builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 //{

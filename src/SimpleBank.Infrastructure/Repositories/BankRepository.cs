@@ -31,16 +31,16 @@ namespace SimpleBank.Infrastructure.Repositories
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<Bank?> GetByIFSC(string branchIFSC, bool fetchTransactionRecords = false)
+        public async Task<Bank?> GetByBankCode(string bankCode, bool fetchTransactionRecords = false)
         {
             var fetchOnlyBankAndBankAccount = _dbContext.Banks
                 .Include(b => b.Accounts)
-                .Where(b => b.BranchIFSC == branchIFSC);
+                .Where(b => b.BankCode == bankCode);
 
             var fetchAllRelatedEntities = _dbContext.Banks
                 .Include(b => b.Accounts)
                 .ThenInclude(a => a.TransactionRecords)
-                .Where(b => b.BranchIFSC == branchIFSC);
+                .Where(b => b.BankCode == bankCode);
 
             var queryToRun = fetchTransactionRecords
                 ? fetchAllRelatedEntities
