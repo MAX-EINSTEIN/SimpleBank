@@ -38,8 +38,8 @@ namespace SimpleBank.Application.Services
 
             fundTransfer = await _fundTransferRepository.Add(fundTransfer);
 
-            var sourceBank = await _bankRepository.GetByIFSC(dto.SourceAccountBranchIFSC);
-            var destinationBank = await _bankRepository.GetByIFSC(dto.DestinationAccontBranchIFSC);
+            var sourceBank = await _bankRepository.GetByBankCode(dto.SourceAccountBranchIFSC);
+            var destinationBank = await _bankRepository.GetByBankCode(dto.DestinationAccontBranchIFSC);
 
             if (sourceBank is null || destinationBank is null)
                 return null;

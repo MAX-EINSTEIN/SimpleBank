@@ -41,15 +41,7 @@ namespace SimpleBank.API.Controllers
         {
             Bank bank = new (
                 dto.Name,
-                new Address(
-                    dto.Street,
-                    dto.City,
-                    dto.Region,
-                    dto.Country,
-                    dto.ZipCode
-                ),
-                dto.BankCode,
-                dto.BranchCode
+                dto.BankCode
             );
 
             await _bankRepository.Add(bank);

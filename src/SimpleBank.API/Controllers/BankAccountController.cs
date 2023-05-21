@@ -48,7 +48,7 @@ namespace SimpleBank.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TransactionRecord>>> GetAccountStatetement(string branchIFSC, long accountId)
         {
-            var bank = await _bankRepository.GetByIFSC(branchIFSC, true);
+            var bank = await _bankRepository.GetByBankCode(branchIFSC, true);
 
             if (bank is null) return NotFound();
 

@@ -18,35 +18,21 @@ namespace SimpleBank.Infrastructure.Repositories
         public async Task<Bank?> GetById(long id)
         {
             return await _dbContext.Banks
-                .Include(b => b.Accounts)
                 .Where(b => b.Id == id).SingleOrDefaultAsync();
         }
 
         public async Task<Bank?> GetByName(string bankName)
         {
             return await _dbContext.Banks
-                .Include(b => b.Accounts)
-                .ThenInclude(a => a.TransactionRecords)
                 .Where(b => b.Name == bankName)
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<Bank?> GetByIFSC(string branchIFSC, bool fetchTransactionRecords = false)
+        public async Task<Bank?> GetByBankCode(string bankCode, bool fetchTransactionRecords = false)
         {
-            var fetchOnlyBankAndBankAccount = _dbContext.Banks
-                .Include(b => b.Accounts)
-                .Where(b => b.BranchIFSC == branchIFSC);
-
-            var fetchAllRelatedEntities = _dbContext.Banks
-                .Include(b => b.Accounts)
-                .ThenInclude(a => a.TransactionRecords)
-                .Where(b => b.BranchIFSC == branchIFSC);
-
-            var queryToRun = fetchTransactionRecords
-                ? fetchAllRelatedEntities
-                : fetchOnlyBankAndBankAccount;
-
-            return await queryToRun.SingleOrDefaultAsync();
+            return await _dbContext.Banks
+                            .Where(b => b.BankCode == bankCode)
+                            .SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Bank>> List()

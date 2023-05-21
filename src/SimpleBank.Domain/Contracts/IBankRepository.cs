@@ -5,6 +5,6 @@ namespace SimpleBank.Domain.Contracts
     public interface IBankRepository: IRepository<Bank>
     {
         public Task<Bank?> GetByName(string bankName);
-        public Task<Bank?> GetByIFSC(string branchIFSC, bool fetchTransactionRecords = false);
+        public Task<Bank?> GetByBankCode(string bankCode, bool fetchTransactionRecords = false);
     }
 }
