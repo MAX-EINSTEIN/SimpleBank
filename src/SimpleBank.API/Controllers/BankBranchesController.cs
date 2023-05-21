@@ -30,10 +30,13 @@ namespace SimpleBank.API.Controllers
         {
             var address = new Address(dto.Street, dto.City, dto.Region, dto.Country, dto.ZipCode);
             var bankBranch = await _bankBranchManagementService
-                .AddBankBranch(dto.BankId, dto.Name, dto.BranchCode, address);
+                .AddBankBranch(dto.BankId, dto.Name, address);
+
+            if (bankBranch is null)
+                return BadRequest();
 
             return CreatedAtAction(nameof(Get),
-                                    new { dto.BranchCode },
+                                    new { bankBranch.BranchCode },
                                     bankBranch
                                     );
         }

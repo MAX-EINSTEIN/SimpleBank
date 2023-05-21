@@ -1,4 +1,5 @@
 ﻿using SimpleBank.Domain.Contracts;
+using SimpleBank.Domain.Utils;
 
 namespace SimpleBank.Domain.Models
 {
@@ -15,12 +16,11 @@ namespace SimpleBank.Domain.Models
 
         public BankBranch(Bank bank,
                           string name,
-                          string branchCode,
                           Address address)
         {
             _bankId = bank?.Id ?? throw new ArgumentNullException(nameof(bank)); ;
             Name = name;
-            BranchCode = branchCode;
+            BranchCode = AlphaNumericGenerator.GetRandomNumbers(6);
             Address = address;
         }
     }

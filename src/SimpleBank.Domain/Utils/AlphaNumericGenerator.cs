@@ -3,16 +3,18 @@
     internal static class AlphaNumericGenerator
     {
         private static readonly Random _rGenerator = new();
+        private static readonly string _digits = "0123456789";
         private static readonly string _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         public static string GetRandomNumbers(int length)
-        {
-            var randomNums = _rGenerator.Next(
-                (int) Math.Pow(10, length - 1), 
-                (int) Math.Pow(10, length) - 1
-                ).ToString($"D{length}");
+        { 
+            var randomNumbers = new string(
+                    Enumerable.Repeat(_digits, length)
+                    .Select(d => d[_rGenerator.Next(d.Length)])
+                    .ToArray()
+                );
 
-            return randomNums;
+            return randomNumbers;
         }
 
         public static string GetRandomAlphabets(int length)

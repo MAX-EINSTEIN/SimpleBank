@@ -16,11 +16,11 @@ namespace SimpleBank.Domain.Services
         }
 
 
-        public async Task<BankBranch?> AddBankBranch(long bankId, string name, string branchCode, Address address)
+        public async Task<BankBranch?> AddBankBranch(long bankId, string name, Address address)
         {
             var bank = await _bankRepository.GetById(bankId) ?? throw new ArgumentException("Cannot add bank branch to a non-existent bank.");
 
-            var branch = new BankBranch(bank, name, branchCode, address);
+            var branch = new BankBranch(bank, name, address);
             await _bankBranchRepository.Add(branch);
 
             return await _bankBranchRepository.GetById(branch.Id);

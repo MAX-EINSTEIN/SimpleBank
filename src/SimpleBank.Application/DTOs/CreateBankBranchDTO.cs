@@ -8,7 +8,6 @@
         string Region,
         string Country,
         string ZipCode,
-        string BranchCode,
         long BankId
     );
 }

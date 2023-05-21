@@ -2,7 +2,7 @@
 
 namespace SimpleBank.Domain.Models
 {
-    public class BankAccount : Entity
+    public class BankAccount : Entity, IAggregateRoot
     {
         public string AccountNumber { get; }
 
