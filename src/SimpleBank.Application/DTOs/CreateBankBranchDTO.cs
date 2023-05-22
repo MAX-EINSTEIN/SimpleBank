@@ -7,7 +7,6 @@
         string City,
         string Region,
         string Country,
-        string ZipCode,
-        long BankId
+        string ZipCode
     );
 }

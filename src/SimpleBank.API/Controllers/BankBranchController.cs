@@ -7,12 +7,12 @@ namespace SimpleBank.API.Controllers
 {
     [ApiController]
     [Route("api/bank/")]
-    public class BankBranchesController: ControllerBase
+    public class BankBranchController: ControllerBase
     {
         private readonly IBankBranchManagementService _bankBranchManagementService;
         private readonly IBankBranchRepository _bankBranchRepository;
 
-        public BankBranchesController(IBankBranchManagementService bankBranchManagementService,
+        public BankBranchController(IBankBranchManagementService bankBranchManagementService,
                                       IBankBranchRepository bankBranchRepository)
         {
             _bankBranchManagementService = bankBranchManagementService;
@@ -25,12 +25,12 @@ namespace SimpleBank.API.Controllers
             return Ok(await _bankBranchRepository.GetByBranchCode(branchCode));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post(CreateBankBranchDTO dto)
+        [HttpPost("{bankCode}/branches/create")]
+        public async Task<IActionResult> Post(string bankCode, CreateBankBranchDTO dto)
         {
             var address = new Address(dto.Street, dto.City, dto.Region, dto.Country, dto.ZipCode);
             var bankBranch = await _bankBranchManagementService
-                .AddBankBranch(dto.BankId, dto.Name, address);
+                .AddBankBranch(bankCode, dto.Name, address);
 
             if (bankBranch is null)
                 return BadRequest();
@@ -41,10 +41,10 @@ namespace SimpleBank.API.Controllers
                                     );
         }
 
-        [HttpDelete("{bankId}/branch/{branchId}/delete")]
-        public async Task<IActionResult> Delete(long bankId, long branchId)
+        [HttpDelete("{bankCode}/branch/{branchCode}/delete")]
+        public async Task<IActionResult> Delete(string bankCode, string branchCode)
         {
-            var deleted = await _bankBranchManagementService.RemoveBankBranch(bankId, branchId);
+            var deleted = await _bankBranchManagementService.RemoveBankBranch(bankCode, branchCode);
             return deleted ? NoContent() : NotFound();
         }
     }

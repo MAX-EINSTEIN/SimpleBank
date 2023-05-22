@@ -3,6 +3,7 @@ using SimpleBank.Application.DTOs;
 using SimpleBank.Domain.Contracts;
 using SimpleBank.Domain.Models;
 using SimpleBank.Domain.Services;
+using System.Security.Principal;
 
 namespace SimpleBank.API.Controllers
 {
@@ -21,28 +22,25 @@ namespace SimpleBank.API.Controllers
             _logger = logger;
         }
 
-        [Route("accounts/list")]
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<BankAccount>>> Index([FromQuery]string bankCode)
+        [HttpGet("bank/{bankCode}/accounts")]
+        public async Task<ActionResult<IEnumerable<BankAccount>>> Index(string bankCode)
         {
             var accounts = await _bankAccountRepository.List(a => a.BranchIFSC.Substring(0, 4) == bankCode);
             if (accounts is null) return NotFound();
             return Ok(accounts);
         }
 
-        [Route("account/details")]
-        [HttpGet]
-        public async Task<ActionResult<BankAccount>> Get([FromQuery]long accountId)
+        [HttpGet("bank/account/details")]
+        public async Task<ActionResult<BankAccount>> Get([FromQuery]string accountNumber, [FromQuery] string IFSC)
         {
-            var account = await _bankAccountRepository.GetById(accountId);
+            var account = await _bankAccountRepository.GetByAccountNumberAndIFSC(accountNumber, IFSC);
        
             if (account is null) return NotFound();
 
             return Ok(account);
         }
 
-        [Route("account/statement")]
-        [HttpGet]
+        [HttpGet("bank/account/statement")]
         public async Task<ActionResult<IEnumerable<TransactionRecord>>> GetAccountStatetement([FromQuery]string AccountNumber,[FromQuery] string IFSC)
         {
             var account = await _bankAccountRepository.GetByAccountNumberAndIFSC(AccountNumber, IFSC);
@@ -52,29 +50,29 @@ namespace SimpleBank.API.Controllers
             return Ok(account.TransactionRecords);
         }
 
-        [Route("accounts/create")]
-        [HttpPost]
-        public async Task<ActionResult<BankAccount>> Post(CreateAccountDTO dto)
+        [HttpPost("bank/{bankCode}/branch/{branchCode}/accounts/create")]
+        public async Task<ActionResult<BankAccount>> Post(string bankCode, string branchCode, [FromBody] CreateAccountDTO dto)
         {
             var address = new Address(dto.Street, dto.City, dto.Region, dto.Country, dto.ZipCode);
             var accountHolder = new Customer(dto.Name, dto.Gender, dto.Email, dto.PhoneNumber, address);
             var account = await _accountService.CreateAccount(accountHolder,
                                                               dto.TransactionLimit,
                                                               dto.Currency,
-                                                              dto.BankCode,
-                                                              dto.BranchCode);
+                                                              bankCode,
+                                                              branchCode);
 
             return CreatedAtAction(
                         nameof(Get),
                         new
                         {
-                            accountId = account.Id
+                            accountNumber = account.AccountNumber,
+                            IFSC = account.BranchIFSC
                         },
                         account
                     );
         }
 
-        [HttpPut("account/{accountNumber}/{IFSC}/deposit/{amount}")]
+        [HttpPut("bank/account/deposit/")]
         public async Task<IActionResult> Deposit(string accountNumber, string IFSC, decimal amount)
         {
             var account = await _bankAccountRepository.GetByAccountNumberAndIFSC(accountNumber, IFSC);
@@ -88,13 +86,14 @@ namespace SimpleBank.API.Controllers
             return AcceptedAtAction(nameof(Get),
                 new
                 {
-                    accountId = account.Id
+                    accountNumber = account.AccountNumber,
+                    IFSC = account.BranchIFSC
                 },
                 account
                 );
         }
 
-        [HttpPut("account/{accountNumber}/{IFSC}/withdraw/{amount}")]
+        [HttpPut("bank/account/withdraw")]
         public async Task<IActionResult> Withdraw(string accountNumber, string IFSC, decimal amount)
         {
             var account = await _bankAccountRepository.GetByAccountNumberAndIFSC(accountNumber, IFSC);
@@ -108,22 +107,19 @@ namespace SimpleBank.API.Controllers
             return AcceptedAtAction(nameof(Get),
                 new
                 {
-                    accountId = account.Id
+                    accountNumber = account.AccountNumber,
+                    IFSC = account.BranchIFSC
                 },
                 account
                 );
         }
 
-        [HttpDelete("accounts/{accountId}/delete/")]
-        public async Task<IActionResult> Delete(long accountId)
+        [HttpDelete("bank/account/delete/")]
+        public async Task<IActionResult> Delete(string accountNumber, string IFSC)
         { 
-            var account = await _bankAccountRepository.GetById(accountId);
-
-            if (account is null) return NotFound();
-
-            await _accountService.DeleteAccount(account.AccountNumber, account.BranchIFSC);
-            
-            return NoContent();
+            return await _accountService.DeleteAccount(accountNumber, IFSC) 
+                ? NoContent()
+                : NotFound();
         }
     }
 }

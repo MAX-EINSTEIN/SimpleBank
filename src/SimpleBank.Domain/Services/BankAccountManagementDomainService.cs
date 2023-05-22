@@ -37,13 +37,15 @@ namespace SimpleBank.Domain.Services
         }
 
 
-        public async Task DeleteAccount(string AccountNumber, string IFSC)
+        public async Task<bool> DeleteAccount(string AccountNumber, string IFSC)
         {
             var account = await _bankAccountRepository.GetByAccountNumberAndIFSC(AccountNumber, IFSC); 
 
-            if (account is null) { return;  }
+            if (account is null) { return false;  }
 
             await _bankAccountRepository.Delete(account);
+
+            return true;
         }
 
     }

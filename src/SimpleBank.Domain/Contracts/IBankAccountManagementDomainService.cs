@@ -14,6 +14,6 @@ namespace SimpleBank.Domain.Contracts
                                                string currency,
                                                string branchCode,
                                                string bankCode);
-        public Task DeleteAccount(string AccountNumber, string IFSC);
+        public Task<bool> DeleteAccount(string AccountNumber, string IFSC);
     }
 }
