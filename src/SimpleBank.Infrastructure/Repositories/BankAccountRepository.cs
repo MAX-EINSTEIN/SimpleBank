@@ -1,4 +1,5 @@
-﻿using SimpleBank.Domain.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using SimpleBank.Domain.Contracts;
 using SimpleBank.Domain.Models;
 using System.Linq.Expressions;
 
@@ -10,41 +11,59 @@ namespace SimpleBank.Infrastructure.Repositories
 
         // TODO: Implement all BankAccountRepository Methods
 
-        public IUnitOfWork UnitOfWork => throw new NotImplementedException();
+        public IUnitOfWork UnitOfWork => _dbContext;
 
-        public Task<BankAccount> GetByAccountNumberAndIFSC(string AccountNumber, string IFSC)
+        public BankAccountRepository(SimpleBankDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public Task<BankAccount?> GetById(long id)
+        public async Task<BankAccount?> GetByAccountNumberAndIFSC(string AccountNumber, string IFSC)
         {
-            throw new NotImplementedException();
+            return await _dbContext.BankAccounts
+                        .Include(a => a.TransactionRecords)
+                        .Where(a => a.AccountNumber == AccountNumber)
+                        .Where(a => a.BranchIFSC == IFSC)
+                        .SingleOrDefaultAsync();
         }
 
-        public Task<IEnumerable<BankAccount>> List()
+        public async Task<BankAccount?> GetById(long id)
         {
-            throw new NotImplementedException();
+            return await _dbContext.BankAccounts
+                .Where(a => a.Id == id)
+                .SingleOrDefaultAsync();
         }
 
-        public Task<IEnumerable<BankAccount>> List(Expression<Func<BankAccount, bool>> predicate)
+        public async Task<IEnumerable<BankAccount>> List()
         {
-            throw new NotImplementedException();
+            return await _dbContext.BankAccounts
+                .ToListAsync();
         }
 
-        public Task<BankAccount> Add(BankAccount entity)
+        public async Task<IEnumerable<BankAccount>> List(Expression<Func<BankAccount, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await _dbContext.BankAccounts
+                .Where(predicate)
+                .ToListAsync();
         }
 
-        public Task Delete(BankAccount entity)
+        public async Task<BankAccount> Add(BankAccount entity)
         {
-            throw new NotImplementedException();
+            var account = (await _dbContext.BankAccounts.AddAsync(entity)).Entity;
+            await _dbContext.SaveChangesAsync();
+            return account;
         }
 
-        public Task Update(BankAccount entity)
+        public async Task Delete(BankAccount entity)
         {
-            throw new NotImplementedException();
+             _dbContext.BankAccounts.Remove(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task Update(BankAccount entity)
+        {
+            _dbContext.BankAccounts.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

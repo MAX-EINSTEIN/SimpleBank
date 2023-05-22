@@ -2,153 +2,127 @@
 using SimpleBank.Application.DTOs;
 using SimpleBank.Domain.Contracts;
 using SimpleBank.Domain.Models;
+using SimpleBank.Domain.Services;
 
 namespace SimpleBank.API.Controllers
 {
     [ApiController]
-    [Route("api/bank")]
+    [Route("api")]
     public class BankAccountController : ControllerBase
     {
-        private readonly IBankRepository _bankRepository;
+        private readonly IBankAccountManagementDomainService _accountService;
+        private readonly IBankAccountRepository _bankAccountRepository;
         private readonly ILogger<BankController> _logger;
 
-        public BankAccountController(IBankRepository bankRepository, ILogger<BankController> logger)
+        public BankAccountController(IBankAccountManagementDomainService accountService, IBankAccountRepository bankAccountRepository, ILogger<BankController> logger)
         {
-            _bankRepository = bankRepository;
+            _accountService = accountService;
+            _bankAccountRepository = bankAccountRepository;
             _logger = logger;
         }
 
-        [Route("{bankId}/accounts/list")]
+        [Route("accounts/list")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BankAccount>>> Index(long bankId)
+        public async Task<ActionResult<IEnumerable<BankAccount>>> Index([FromQuery]string bankCode)
         {
-            var bank = await _bankRepository.GetById(bankId);
-            if (bank is null) return NotFound();
-            return Ok(bank.Accounts);
+            var accounts = await _bankAccountRepository.List(a => a.BranchIFSC.Substring(0, 4) == bankCode);
+            if (accounts is null) return NotFound();
+            return Ok(accounts);
         }
 
-        [Route("{bankId}/accounts/{accountId}/details")]
+        [Route("account/details")]
         [HttpGet]
-        public async Task<ActionResult<BankAccount>> Get(long bankId, long accountId)
+        public async Task<ActionResult<BankAccount>> Get([FromQuery]long accountId)
         {
-            var bank = await _bankRepository.GetById(bankId);
-            
-            if (bank is null) return NotFound();
-            
-            var account = bank.Accounts
-                            .Where(a => a.Id == accountId)
-                            .FirstOrDefault();
-
+            var account = await _bankAccountRepository.GetById(accountId);
+       
             if (account is null) return NotFound();
 
             return Ok(account);
         }
 
-        [Route("{branchIFSC}/accounts/{accountId}/statement")]
+        [Route("account/statement")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TransactionRecord>>> GetAccountStatetement(string branchIFSC, long accountId)
+        public async Task<ActionResult<IEnumerable<TransactionRecord>>> GetAccountStatetement([FromQuery]string AccountNumber,[FromQuery] string IFSC)
         {
-            var bank = await _bankRepository.GetByBankCode(branchIFSC, true);
-
-            if (bank is null) return NotFound();
-
-            var account = bank.Accounts
-                            .Where(a => a.Id == accountId)
-                            .FirstOrDefault();
+            var account = await _bankAccountRepository.GetByAccountNumberAndIFSC(AccountNumber, IFSC);
 
             if (account is null) return NotFound();
 
             return Ok(account.TransactionRecords);
         }
 
-        [Route("{bankId}/accounts/create")]
+        [Route("accounts/create")]
         [HttpPost]
-        public async Task<ActionResult<BankAccount>> Post(long bankId, CreateAccountDTO dto)
+        public async Task<ActionResult<BankAccount>> Post(CreateAccountDTO dto)
         {
-            var bank = await _bankRepository.GetById(bankId);
-
-            if (bank is null) return NotFound();
-
             var address = new Address(dto.Street, dto.City, dto.Region, dto.Country, dto.ZipCode);
             var accountHolder = new Customer(dto.Name, dto.Gender, dto.Email, dto.PhoneNumber, address);
-
-            var account = bank.CreateAccount(accountHolder, dto.TransactionLimit, dto.Currency);
-
-            await _bankRepository.Update(bank);
+            var account = await _accountService.CreateAccount(accountHolder,
+                                                              dto.TransactionLimit,
+                                                              dto.Currency,
+                                                              dto.BankCode,
+                                                              dto.BranchCode);
 
             return CreatedAtAction(
                         nameof(Get),
                         new
                         {
-                            bankId = bank.Id,
                             accountId = account.Id
                         },
                         account
                     );
         }
 
-        [HttpPut("{bankId}/accounts/{accountId}/deposit/{amount}")]
-        public async Task<IActionResult> Deposit(long bankId, long accountId, decimal amount)
+        [HttpPut("account/{accountNumber}/{IFSC}/deposit/{amount}")]
+        public async Task<IActionResult> Deposit(string accountNumber, string IFSC, decimal amount)
         {
-            var bank = await _bankRepository.GetById(bankId);
-            if (bank is null)  return NotFound(); 
-
-            var account = bank.Accounts
-                            .Where(a => a.Id == accountId)
-                            .FirstOrDefault();
+            var account = await _bankAccountRepository.GetByAccountNumberAndIFSC(accountNumber, IFSC);
 
             if (account is null) return NotFound();
 
             account.DepositAmount(amount);
 
-            await _bankRepository.Update(bank);
+            await _bankAccountRepository.Update(account);
 
             return AcceptedAtAction(nameof(Get),
                 new
                 {
-                    bankId = bank.Id,
                     accountId = account.Id
                 },
                 account
                 );
         }
 
-        [HttpPut("{bankId}/accounts/{accountId}/withdraw/{amount}")]
-        public async Task<IActionResult> Withdraw(long bankId, long accountId, decimal amount)
+        [HttpPut("account/{accountNumber}/{IFSC}/withdraw/{amount}")]
+        public async Task<IActionResult> Withdraw(string accountNumber, string IFSC, decimal amount)
         {
-            var bank = await _bankRepository.GetById(bankId);
-            if (bank is null) return NotFound();
-
-            var account = bank.Accounts
-                            .Where(a => a.Id == accountId)
-                            .FirstOrDefault();
+            var account = await _bankAccountRepository.GetByAccountNumberAndIFSC(accountNumber, IFSC);
 
             if (account is null) return NotFound();
 
-            account.WithdrawAmount(amount);
+            account.DepositAmount(amount);
 
-            await _bankRepository.Update(bank);
+            await _bankAccountRepository.Update(account);
 
             return AcceptedAtAction(nameof(Get),
                 new
                 {
-                    bankId = bank.Id,
                     accountId = account.Id
                 },
                 account
                 );
         }
 
-        [HttpDelete("{bankId}/accounts/{accountId}/delete/")]
-        public async Task<IActionResult> Delete(long bankId, long accountId)
-        {
-            var bank = await _bankRepository.GetById(bankId);
-            if (bank is null) { return NotFound(); }
+        [HttpDelete("accounts/{accountId}/delete/")]
+        public async Task<IActionResult> Delete(long accountId)
+        { 
+            var account = await _bankAccountRepository.GetById(accountId);
 
-            if (!bank.DeleteAccount(accountId)) return NotFound();
+            if (account is null) return NotFound();
 
-            await _bankRepository.Update(bank);
-
+            await _accountService.DeleteAccount(account.AccountNumber, account.BranchIFSC);
+            
             return NoContent();
         }
     }

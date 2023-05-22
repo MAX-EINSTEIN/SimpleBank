@@ -8,12 +8,12 @@ namespace SimpleBank.Application.Services
     public class FundTransferService : IFundTransferService
     {
         private readonly IFundTransferRepository _fundTransferRepository;
-        private readonly IBankRepository _bankRepository;
+        private readonly IBankAccountRepository _bankAccountRepository;
 
-        public FundTransferService(IFundTransferRepository fundTransferRepository, IBankRepository bankRepository)
+        public FundTransferService(IFundTransferRepository fundTransferRepository, IBankAccountRepository bankAccountRepository)
         {
             _fundTransferRepository = fundTransferRepository;
-            _bankRepository = bankRepository;
+            _bankAccountRepository = bankAccountRepository;
         }
 
         public async Task<FundTransfer?> GetByUTRNumber(string UTRNumber)
@@ -38,18 +38,18 @@ namespace SimpleBank.Application.Services
 
             fundTransfer = await _fundTransferRepository.Add(fundTransfer);
 
-            var sourceBank = await _bankRepository.GetByBankCode(dto.SourceAccountBranchIFSC);
-            var destinationBank = await _bankRepository.GetByBankCode(dto.DestinationAccontBranchIFSC);
-
-            if (sourceBank is null || destinationBank is null)
-                return null;
-
             try
             {
-                fundTransfer.TransferAmount(sourceBank, destinationBank);
+                var sourceAccount = await _bankAccountRepository.GetByAccountNumberAndIFSC(dto.SourceAccountNumber, dto.SourceAccountBranchIFSC);
+                var destinationAccount = await _bankAccountRepository.GetByAccountNumberAndIFSC(dto.DestinationAccountNumber, dto.DestinationAccontBranchIFSC);
 
-                await _bankRepository.Update(sourceBank);
-                await _bankRepository.Update(destinationBank);
+                if (sourceAccount is null || destinationAccount is null)
+                    throw new InvalidOperationException("Source Or Destination Account does not exists");
+
+                fundTransfer.TransferAmount(sourceAccount, destinationAccount);
+
+                await _bankAccountRepository.Update(sourceAccount);
+                await _bankAccountRepository.Update(destinationAccount);
             }
             catch
             {

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SimpleBank.Infrastructure;
 
@@ -11,9 +12,11 @@ using SimpleBank.Infrastructure;
 namespace SimpleBank.Infrastructure.Migrations
 {
     [DbContext(typeof(SimpleBankDbContext))]
-    partial class SimpleBankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230522104412_RemovedAccountNavigationPropertyFromBankEntity")]
+    partial class RemovedAccountNavigationPropertyFromBankEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,10 +83,6 @@ namespace SimpleBank.Infrastructure.Migrations
                         .HasColumnName("Balance");
 
                     b.HasKey("Id");
-
-                    b.HasAlternateKey("AccountNumber", "BranchIFSC");
-
-                    b.HasIndex("AccountNumber", "BranchIFSC");
 
                     b.ToTable("BankAccount", (string)null);
                 });

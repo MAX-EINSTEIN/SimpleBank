@@ -42,13 +42,11 @@ namespace SimpleBank.Domain.Models
             Remarks = remarks;
         }
 
-        public void TransferAmount(Bank sourceBank, Bank destinationBank)
+        public void TransferAmount(BankAccount sourceAccount, BankAccount destinationAccount)
         {
-            var sourceAccount = sourceBank.Accounts.Where(a => a.AccountNumber == SourceAccountNumber).SingleOrDefault();
             if (sourceAccount is null)
                 throw new InvalidOperationException("The Provided Source Account Number is incorrect.");
 
-            var destinationAccount = destinationBank.Accounts.Where(a => a.AccountNumber == DestinationAccountNumber).SingleOrDefault();
             if (destinationAccount is null)
                 throw new InvalidOperationException("The Provided Source Account Number is incorrect.");
 

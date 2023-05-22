@@ -12,7 +12,9 @@
         string Country,
         string ZipCode,
         decimal TransactionLimit,
-        string Currency
+        string Currency,
+        string BankCode,
+        string BranchCode
     );
         
     

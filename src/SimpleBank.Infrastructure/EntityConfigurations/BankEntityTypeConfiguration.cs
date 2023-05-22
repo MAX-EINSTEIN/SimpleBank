@@ -22,11 +22,6 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
             builder.Property(b => b.BankCode)
                 .HasMaxLength(4)
                 .IsRequired();
-
-            var navigation = builder
-                .Metadata
-                .FindNavigation(nameof(Bank.Accounts));
-            navigation!.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

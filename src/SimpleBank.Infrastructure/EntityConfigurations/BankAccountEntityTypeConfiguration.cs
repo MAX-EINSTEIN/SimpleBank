@@ -19,6 +19,9 @@ namespace SimpleBank.Infrastructure.EntityConfigurations
             builder.Property(b => b.Id)
                 .ValueGeneratedOnAdd();
 
+            builder.HasAlternateKey(b => new { b.AccountNumber, b.BranchIFSC });
+            builder.HasIndex(b => new { b.AccountNumber, b.BranchIFSC });
+
             builder.Property(b => b.AccountNumber)
                 .HasMaxLength(10)
                 .IsRequired();

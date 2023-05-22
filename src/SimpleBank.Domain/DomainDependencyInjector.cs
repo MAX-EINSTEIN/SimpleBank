@@ -9,7 +9,7 @@ namespace SimpleBank.Domain
         public static IServiceCollection AddDomainServices(this IServiceCollection services)
         {
             services.AddTransient<IBankBranchManagementService, BankBranchManagementService>();
-
+            services.AddTransient<IBankAccountManagementDomainService, BankAccountManagementDomainService>();
             return services;
         }
     }
