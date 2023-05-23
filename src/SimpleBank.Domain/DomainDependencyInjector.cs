@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Services;
+using SimpleBank.Domain.BankAccountAggregate;
+using SimpleBank.Domain.BankBranchAggregate;
 
 namespace SimpleBank.Domain
 {

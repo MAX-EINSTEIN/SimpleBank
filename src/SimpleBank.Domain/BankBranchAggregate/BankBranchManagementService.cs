@@ -1,10 +1,11 @@
-﻿using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Models;
+﻿using SimpleBank.Domain.BankAggregate;
+using SimpleBank.Domain.Common;
 
-namespace SimpleBank.Domain.Services
+namespace SimpleBank.Domain.BankBranchAggregate
 {
 
-    public class BankBranchManagementService: IBankBranchManagementService {
+    public class BankBranchManagementService : IBankBranchManagementService
+    {
         private readonly IBankRepository _bankRepository;
         private readonly IBankBranchRepository _bankBranchRepository;
 
@@ -32,12 +33,12 @@ namespace SimpleBank.Domain.Services
             var bank = await _bankRepository.GetByBankCode(bankCode) ?? throw new ArgumentException("Cannot add bank branch to a non-existent bank.");
 
             var noOfBankBranches = await _bankBranchRepository.GetNumberOfBranchesByBankId(bank.Id);
-            
+
             if (noOfBankBranches <= 1) return false;
 
             var branch = await _bankBranchRepository.GetByBranchCode(branchCode)
                 ?? throw new ArgumentException("Bank Branch with the provided Branch Code doesn't exist");
-            
+
             await _bankBranchRepository.Delete(branch);
 
             return true;

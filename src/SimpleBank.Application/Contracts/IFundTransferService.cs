@@ -1,5 +1,5 @@
 ﻿using SimpleBank.Application.DTOs;
-using SimpleBank.Domain.Models;
+using SimpleBank.Domain.FundTransferAggregate;
 
 namespace SimpleBank.Application.Contracts
 {

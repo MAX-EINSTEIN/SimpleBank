@@ -1,6 +1,7 @@
-﻿using SimpleBank.Domain.Contracts;
+﻿using SimpleBank.Domain.Common;
+using SimpleBank.Domain.Contracts;
 
-namespace SimpleBank.Domain.Models
+namespace SimpleBank.Domain.BankAccountAggregate
 {
     public class Customer : ValueObject
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Models;
+using SimpleBank.Domain.FundTransferAggregate;
 using System.Linq.Expressions;
 
 namespace SimpleBank.Infrastructure.Repositories

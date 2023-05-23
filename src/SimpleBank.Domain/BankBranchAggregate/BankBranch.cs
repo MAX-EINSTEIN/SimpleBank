@@ -1,14 +1,15 @@
-﻿using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Utils;
+﻿using SimpleBank.Domain.BankAggregate;
+using SimpleBank.Domain.Contracts;
+using SimpleBank.Domain.Common;
 
-namespace SimpleBank.Domain.Models
+namespace SimpleBank.Domain.BankBranchAggregate
 {
-    public class BankBranch: Entity, IAggregateRoot
+    public class BankBranch : Entity, IAggregateRoot
     {
         private readonly long _bankId;
         public long BankId => _bankId;
 
-        public string Name { get;  }
+        public string Name { get; }
         public string BranchCode { get; }
         public Address Address { get; }
 

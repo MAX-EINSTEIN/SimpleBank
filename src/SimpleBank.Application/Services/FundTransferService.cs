@@ -1,7 +1,7 @@
 ﻿using SimpleBank.Application.Contracts;
 using SimpleBank.Application.DTOs;
-using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Models;
+using SimpleBank.Domain.BankAccountAggregate;
+using SimpleBank.Domain.FundTransferAggregate;
 
 namespace SimpleBank.Application.Services
 {

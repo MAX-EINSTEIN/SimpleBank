@@ -1,6 +1,6 @@
 ﻿using SimpleBank.Domain.Contracts;
 
-namespace SimpleBank.Domain.Models
+namespace SimpleBank.Domain.Common
 {
     public class Address : ValueObject
     {

@@ -1,9 +1,9 @@
 ﻿using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Utils;
+using SimpleBank.Domain.Common;
 
-namespace SimpleBank.Domain.Models
+namespace SimpleBank.Domain.BankAccountAggregate
 {
-    public class TransactionRecord: Entity
+    public class TransactionRecord : Entity
     {
         public string ReferenceId { get; }
         public string Description { get; }
@@ -22,7 +22,7 @@ namespace SimpleBank.Domain.Models
             DebitedAmount = debitedAmount;
             CreditedAmount = creditAmount;
             UpdatedBalance = updatedBalance;
-            TransactionType = ((DebitedAmount == 0m) ? "Credit" : "Debit").ToUpperInvariant();
+            TransactionType = (DebitedAmount == 0m ? "Credit" : "Debit").ToUpperInvariant();
         }
 
     }

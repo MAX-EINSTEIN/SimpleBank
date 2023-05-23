@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SimpleBank.Domain.BankAccountAggregate;
+using SimpleBank.Domain.BankAggregate;
+using SimpleBank.Domain.BankBranchAggregate;
 using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Models;
+using SimpleBank.Domain.FundTransferAggregate;
 using SimpleBank.Infrastructure.EntityConfigurations;
 
 namespace SimpleBank.Infrastructure

@@ -1,7 +1,7 @@
 ﻿using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Utils;
+using SimpleBank.Domain.Common;
 
-namespace SimpleBank.Domain.Models
+namespace SimpleBank.Domain.BankAggregate
 {
     public class Bank : Entity, IAggregateRoot
     {
@@ -10,7 +10,7 @@ namespace SimpleBank.Domain.Models
 
         public Bank()
         {
-            
+
         }
 
         public Bank(string name, string bankCode = "SBIN")

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using SimpleBank.Domain.Contracts;
 using SimpleBank.Application.DTOs;
-using SimpleBank.Domain.Models;
+using SimpleBank.Domain.BankAggregate;
 
 namespace SimpleBank.API.Controllers
 {

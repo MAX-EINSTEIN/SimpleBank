@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SimpleBank.Domain.Models;
+using SimpleBank.Domain.FundTransferAggregate;
 
 namespace SimpleBank.Infrastructure.EntityConfigurations
 {

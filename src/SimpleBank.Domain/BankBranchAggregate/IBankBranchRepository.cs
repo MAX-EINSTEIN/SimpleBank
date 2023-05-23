@@ -1,6 +1,6 @@
-﻿using SimpleBank.Domain.Models;
+﻿using SimpleBank.Domain.Contracts;
 
-namespace SimpleBank.Domain.Contracts
+namespace SimpleBank.Domain.BankBranchAggregate
 {
     public interface IBankBranchRepository : IRepository<BankBranch>
     {

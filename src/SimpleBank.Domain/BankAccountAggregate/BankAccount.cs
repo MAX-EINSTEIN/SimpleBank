@@ -1,6 +1,6 @@
 ﻿using SimpleBank.Domain.Contracts;
 
-namespace SimpleBank.Domain.Models
+namespace SimpleBank.Domain.BankAccountAggregate
 {
     public class BankAccount : Entity, IAggregateRoot
     {
@@ -16,7 +16,7 @@ namespace SimpleBank.Domain.Models
         public decimal Balance => Math.Round(_balance, 2);
 
         private readonly List<TransactionRecord> _transactionRecords = new();
-        public IList<TransactionRecord> TransactionRecords => _transactionRecords.AsReadOnly(); 
+        public IList<TransactionRecord> TransactionRecords => _transactionRecords.AsReadOnly();
 
         public Customer AccountHolder { get; }
 

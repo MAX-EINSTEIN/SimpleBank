@@ -1,10 +1,11 @@
-﻿using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Utils;
+﻿using SimpleBank.Domain.BankAccountAggregate;
+using SimpleBank.Domain.Contracts;
+using SimpleBank.Domain.Common;
 using System.Transactions;
 
-namespace SimpleBank.Domain.Models
+namespace SimpleBank.Domain.FundTransferAggregate
 {
-    public class FundTransfer: Entity, IAggregateRoot
+    public class FundTransfer : Entity, IAggregateRoot
     {
         public string SourceAccountNumber { get; }
         public string SourceAccountBranchIFSC { get; }
@@ -21,7 +22,7 @@ namespace SimpleBank.Domain.Models
         public string? PaymentMode { get; }
         public string Remarks { get; }
 
-        public DateTime TransferDate { get;  }
+        public DateTime TransferDate { get; }
 
         public FundTransfer(
                             string sourceAccountNumber,

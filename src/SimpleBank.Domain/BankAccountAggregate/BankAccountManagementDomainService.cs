@@ -1,16 +1,15 @@
-﻿using SimpleBank.Domain.Contracts;
-using SimpleBank.Domain.Models;
-using SimpleBank.Domain.Utils;
+﻿using SimpleBank.Domain.Common;
 
 
-namespace SimpleBank.Domain.Services
+namespace SimpleBank.Domain.BankAccountAggregate
 {
-    public class BankAccountManagementDomainService: IBankAccountManagementDomainService
+    public class BankAccountManagementDomainService : IBankAccountManagementDomainService
     {
         private readonly IBankAccountRepository _bankAccountRepository;
 
 
-        public BankAccountManagementDomainService(IBankAccountRepository bankAccountRepository) { 
+        public BankAccountManagementDomainService(IBankAccountRepository bankAccountRepository)
+        {
             _bankAccountRepository = bankAccountRepository;
         }
 
@@ -39,9 +38,9 @@ namespace SimpleBank.Domain.Services
 
         public async Task<bool> DeleteAccount(string AccountNumber, string IFSC)
         {
-            var account = await _bankAccountRepository.GetByAccountNumberAndIFSC(AccountNumber, IFSC); 
+            var account = await _bankAccountRepository.GetByAccountNumberAndIFSC(AccountNumber, IFSC);
 
-            if (account is null) { return false;  }
+            if (account is null) { return false; }
 
             await _bankAccountRepository.Delete(account);
 
