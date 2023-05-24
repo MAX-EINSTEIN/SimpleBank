@@ -10,19 +10,22 @@ namespace SimpleBank.API.Controllers
     public class BankBranchController: ControllerBase
     {
         private readonly IBankBranchManagementService _bankBranchManagementService;
-        private readonly IBankBranchRepository _bankBranchRepository;
 
-        public BankBranchController(IBankBranchManagementService bankBranchManagementService,
-                                      IBankBranchRepository bankBranchRepository)
+        public BankBranchController(IBankBranchManagementService bankBranchManagementService)
         {
             _bankBranchManagementService = bankBranchManagementService;
-            _bankBranchRepository = bankBranchRepository;
+        }
+
+        [HttpGet("{bankCode}/branches/list")]
+        public async Task<ActionResult<IEnumerable<BankBranch>>> Index(string bankCode)
+        {
+            return Ok(await _bankBranchManagementService.GetAllBranchesOfABank(bankCode));
         }
 
         [HttpGet("branch/{branchCode}/detail")]
         public async Task<ActionResult<BankBranch?>> Get(string branchCode)
         {
-            return Ok(await _bankBranchRepository.GetByBranchCode(branchCode));
+            return Ok(await _bankBranchManagementService.GetABranchOfABank("HDFC", branchCode));
         }
 
         [HttpPost("{bankCode}/branches/create")]

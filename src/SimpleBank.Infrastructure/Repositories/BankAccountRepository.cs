@@ -9,7 +9,6 @@ namespace SimpleBank.Infrastructure.Repositories
     {
         private readonly SimpleBankDbContext _dbContext;
 
-        // TODO: Implement all BankAccountRepository Methods
 
         public IUnitOfWork UnitOfWork => _dbContext;
 

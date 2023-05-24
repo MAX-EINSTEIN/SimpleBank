@@ -5,8 +5,6 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBank.Domain", "src\SimpleBank.Domain\SimpleBank.Domain.csproj", "{0059C518-5C80-468C-B203-601271B16232}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBank.UnitTests", "tests\SimpleBanks.Tests\SimpleBank.UnitTests.csproj", "{FF78BB41-59BE-4815-BD94-D1519FF81A69}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBank.Infrastructure", "src\SimpleBank.Infrastructure\SimpleBank.Infrastructure.csproj", "{C2B95FCD-25A9-4B33-BE11-BB04CC1C4E1B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBank.API", "src\SimpleBank.API\SimpleBank.API.csproj", "{ED8573A8-2E97-4EDC-BF92-031D40B57467}"
@@ -16,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleBank.Application", "src\SimpleBank.Application\SimpleBank.Application.csproj", "{B493CE3A-9421-4098-9004-626329C31A4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBank.Application", "src\SimpleBank.Application\SimpleBank.Application.csproj", "{B493CE3A-9421-4098-9004-626329C31A4C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleBank.UnitTests", "tests\SimpleBanks.UnitTests\SimpleBank.UnitTests.csproj", "{B7FC56E8-CA90-4C04-8E64-C41A938F5BEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +28,6 @@ Global
 		{0059C518-5C80-468C-B203-601271B16232}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0059C518-5C80-468C-B203-601271B16232}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0059C518-5C80-468C-B203-601271B16232}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF78BB41-59BE-4815-BD94-D1519FF81A69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF78BB41-59BE-4815-BD94-D1519FF81A69}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF78BB41-59BE-4815-BD94-D1519FF81A69}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF78BB41-59BE-4815-BD94-D1519FF81A69}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C2B95FCD-25A9-4B33-BE11-BB04CC1C4E1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C2B95FCD-25A9-4B33-BE11-BB04CC1C4E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2B95FCD-25A9-4B33-BE11-BB04CC1C4E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -44,6 +40,10 @@ Global
 		{B493CE3A-9421-4098-9004-626329C31A4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B493CE3A-9421-4098-9004-626329C31A4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B493CE3A-9421-4098-9004-626329C31A4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7FC56E8-CA90-4C04-8E64-C41A938F5BEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7FC56E8-CA90-4C04-8E64-C41A938F5BEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7FC56E8-CA90-4C04-8E64-C41A938F5BEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7FC56E8-CA90-4C04-8E64-C41A938F5BEF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

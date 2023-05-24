@@ -1,4 +1,4 @@
-﻿using SimpleBank.Domain.Models;
+﻿using SimpleBank.Domain.Common;
 
 namespace SimpleBank.Tests
 {

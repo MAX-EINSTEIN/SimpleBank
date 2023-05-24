@@ -16,6 +16,17 @@ namespace SimpleBank.Domain.BankBranchAggregate
             _bankRepository = bankRepository;
         }
 
+        public async Task<BankBranch?> GetABranchOfABank(string bankCode, string branchCode)
+        {
+            var bank = await _bankRepository.GetByBankCode(bankCode) ?? throw new ArgumentException("Cannot add bank branch to a non-existent bank.");
+            return await _bankBranchRepository.GetByBranchCode(branchCode);
+        }
+
+        public async Task<IEnumerable<BankBranch>> GetAllBranchesOfABank(string bankCode)
+        {
+            var bank = await _bankRepository.GetByBankCode(bankCode) ?? throw new ArgumentException("Cannot add bank branch to a non-existent bank.");
+            return await _bankBranchRepository.List(b => b.BankId == bank.Id);
+        }
 
         public async Task<BankBranch?> AddBankBranch(string bankCode, string name, Address address)
         {
